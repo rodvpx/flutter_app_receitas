@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_receitas/receita.dart';
 
 void main() {
   runApp(const ReceitasFavoritas());
@@ -29,20 +30,45 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
 
-  static const List<Widget> _telas = <Widget>[
-    Center(child: Text('tela de doces')),
-    Center(child: Text('tela de salgados')),
-    Center(child: Text('tela de bebidas')),
-  ];
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
 
+  Widget _buildListaReceitas(List<Receita> lista) {
+    return ListView.builder(
+      padding: const EdgeInsets.all(12),
+      itemCount: lista.length,
+      itemBuilder: (context, index) {
+        final receita = lista[index];
+        return Card(
+          elevation: 3,
+          margin: const EdgeInsets.symmetric(vertical: 8),
+          child: ListTile(
+            leading: Icon(receita.icone, color: Colors.orange, size: 32),
+            title: Text(receita.titulo),
+            subtitle: Text(receita.descricao),
+            trailing: const Icon(
+              Icons.arrow_forward_ios,
+              size: 16,
+              color: Colors.grey,
+            ),
+            onTap: () {},
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final telas = [
+      _buildListaReceitas(doces),
+      _buildListaReceitas(salgadas),
+      _buildListaReceitas(bebidas),
+    ];
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Receitas Favoritas'),
@@ -74,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
 
-      body: _telas[_selectedIndex],
+      body: telas[_selectedIndex],
 
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
